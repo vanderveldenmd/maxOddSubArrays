@@ -1,0 +1,35 @@
+#This function finds the maximum number of subsequences which will have a positive sum
+#This does this by changing the list to two seperate lists of odd and even integer values
+#From here, it is statistics in order to get to the final answer.
+
+#Because you need an odd number of odds and any combination of evens, you only need to get the combinations of odds which will
+#result in an odd number or sum of: (total number of odd values) nCr (all odd values from 1 to n)
+#Even combinations are simply 2 ^ (total number of even values) - 1
+
+class Solution:
+    def numOfSubarrays(self, arr: List[int]) -> int:
+        import itertools
+        evenArr = []
+        oddArr = []
+        
+        returnVal = 0
+        
+        for i in range(len(arr)):
+            if arr[i] % 2 == 0:
+                evenArr.append(arr[i])
+            else:
+                oddArr.append(arr[i])
+        
+        evenLen = len(evenArr)
+        oddLen = len(oddArr)
+        
+        evenFactor = (2 ** evenLen) - 1
+        if evenFactor == 0:
+            evenFactor = 1
+        oddFactor = 0
+        if oddLen == 1:
+            oddFactor = 1
+        for j in range(1, oddLen + 1, 2):
+            oddFactor += len(list(combinations(oddArr, j)))
+            
+        return oddFactor * evenFactor
